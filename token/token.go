@@ -23,6 +23,9 @@ const (
 	ASTERISK = "*"
 	SLASH    = "/"
 
+	EQ  = "=="
+	NEQ = "!="
+
 	LT = "<"
 	GT = ">"
 
