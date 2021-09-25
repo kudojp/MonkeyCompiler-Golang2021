@@ -15,11 +15,11 @@ const (
 	IDENT = "IDENT" // 変数名「である」
 	INT   = "INT"   // 整数「である」
 
-	// operator
+	// operators
 	ASSIGN = "="
 	PLUS   = "+"
 
-	// delimeter
+	// delimeters
 	COMMA     = ","
 	SEMICOLON = ";"
 
@@ -27,4 +27,8 @@ const (
 	RPAREN = ")"
 	LBRACE = "{"
 	RBRACE = "}"
+
+	// keywords
+	FUNCTION = "FUNCTION"
+	LET = "LET"
 )
