@@ -53,11 +53,11 @@ let result = add(five, ten)
 		{token.IDENT, "result"},
 		{token.ASSIGN, "="},
 		{token.IDENT, "add"},
-		{token.RPAREN, "("},
+		{token.LPAREN, "("},
 		{token.IDENT, "five"},
 		{token.COMMA, ","},
 		{token.IDENT, "ten"},
-		{token.LPAREN, ")"},
+		{token.RPAREN, ")"},
 	}
 
 	l := New(input)
