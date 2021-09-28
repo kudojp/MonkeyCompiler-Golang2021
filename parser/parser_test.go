@@ -216,9 +216,9 @@ func TestParsingPrefixExpressions(t *testing.T) {
 
 func TestParsingInfixExpression(t *testing.T) {
 	infixTests := []struct {
-		input string
-		leftValue int64
-		operator string
+		input      string
+		leftValue  int64
+		operator   string
 		rightValue int64
 	}{
 		{"5 + 5", 5, "+", 5},
@@ -238,7 +238,7 @@ func TestParsingInfixExpression(t *testing.T) {
 		checkParserErrors(t, p)
 
 		if len(program.Statements) != 1 {
-			t.Fatalf("program.Statements does not contain %d statements, got=%d\n", l, len(program.Statements))
+			t.Fatalf("program.Statements does not contain %d statements, got=%d\n", 1, len(program.Statements))
 		}
 
 		stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
