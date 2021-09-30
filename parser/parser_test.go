@@ -203,7 +203,7 @@ func TestBooleanExpression(t *testing.T) {
 		if !ok {
 			t.Fatalf("stmt is not ast.Boolean, got=%T", stmt)
 		}
-		if TestBooleanExpression(t, boo, tt.boolValue) {
+		if testLiteralExpression(t, boo, tt.boolValue) {
 			return
 		}
 	}
@@ -292,7 +292,7 @@ func TestParsingInfixExpression(t *testing.T) {
 			t.Fatalf("exp is not ast.InfixExpression. got=%T", stmt.Expression)
 		}
 
-		if !testIntegerLiteral(t, exp.Left, tt.leftValue) {
+		if !testLiteralExpression(t, exp.Left, tt.leftValue) {
 			return
 		}
 
@@ -300,7 +300,7 @@ func TestParsingInfixExpression(t *testing.T) {
 			t.Fatalf("exp.Operator is not %s. got=%s", tt.operator, exp.Operator)
 		}
 
-		if !testIntegerLiteral(t, exp.Right, tt.rightValue) {
+		if !testLiteralExpression(t, exp.Right, tt.rightValue) {
 			return
 		}
 	}
