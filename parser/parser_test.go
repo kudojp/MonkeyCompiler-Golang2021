@@ -203,7 +203,7 @@ func TestBooleanExpression(t *testing.T) {
 		if !ok {
 			t.Fatalf("stmt is not ast.Boolean, got=%T", stmt)
 		}
-		if testBoolean(t, boo, tt.boolValue) {
+		if TestBooleanExpression(t, boo, tt.boolValue) {
 			return
 		}
 	}
@@ -255,9 +255,9 @@ func TestParsingPrefixExpressions(t *testing.T) {
 func TestParsingInfixExpression(t *testing.T) {
 	infixTests := []struct {
 		input      string
-		leftValue  int64
+		leftValue  interface{}
 		operator   string
-		rightValue int64
+		rightValue interface{}
 	}{
 		{"5 + 5", 5, "+", 5},
 		{"5 - 5", 5, "-", 5},
@@ -267,6 +267,9 @@ func TestParsingInfixExpression(t *testing.T) {
 		{"5 < 5", 5, "<", 5},
 		{"5 == 5", 5, "==", 5},
 		{"5 != 5", 5, "!=", 5},
+		{"true == true", true, "==", true},
+		{"true == false", true, "==", false},
+		{"true == false", true, "==", false},
 	}
 
 	for _, tt := range infixTests {
@@ -429,13 +432,13 @@ func testLiteralExpression(
 	case string:
 		return testIdentifier(t, exp, v)
 	case bool:
-		return testBoolean(t, exp, v)
+		return testBooleanLiteral(t, exp, v)
 	}
 	t.Errorf("type of exp not handled. got=%T", exp)
 	return false
 }
 
-func testBoolean(t *testing.T, b ast.Expression, value bool) bool {
+func testBooleanLiteral(t *testing.T, b ast.Expression, value bool) bool {
 	boo, ok := b.(*ast.Boolean)
 	if !ok {
 		t.Errorf("boo is not *ast.Boolean, got=%T", boo)
