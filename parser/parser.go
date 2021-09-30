@@ -115,6 +115,11 @@ func New(l *lexer.Lexer) *Parser {
 	return p
 }
 
+func (p *Parser) peekError(t token.TokenType) {
+	msg := fmt.Sprintf("expected next token to be %s, got %s instead.", t, p.peekToken.Type)
+	p.errors = append(p.errors, msg)
+}
+
 // Returns priority of the next token
 func (p *Parser) peekPrecedence() int {
 	if p, ok := precedences[p.peekToken.Type]; ok {
@@ -273,6 +278,7 @@ func (p *Parser) expectPeek(t token.TokenType) bool {
 		p.nextToken() // proceed
 		return true
 	} else {
+		p.peekError(t)
 		return false
 	}
 }
