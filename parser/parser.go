@@ -376,13 +376,12 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 	if !p.expectPeek(token.ASSIGN) {
 		return nil // second token after "let" is not an assign token.
 	}
+	p.nextToken()
 
-	// TODO: Set Value of this struct here.
-	// For now, we set nothing for it and proceed until semicolon.
-	for !p.curTokenIs(token.SEMICOLON) {
+	stmt.Value = p.parseExpression(LOWEST)
+	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
-
 	return stmt
 }
 
@@ -410,9 +409,13 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	stmt := &ast.ReturnStatement{Token: p.curToken}
 	p.nextToken()
 
-	// TODO: Set ReturnValue of this struct here.
-	// For now, we set nothing for it and proceed until semicolon.
 	for !p.curTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	stmt.ReturnValue = p.parseExpression(LOWEST)
+
+	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
 
