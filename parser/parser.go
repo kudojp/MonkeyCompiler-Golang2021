@@ -25,6 +25,10 @@ type (
 	infixParseFn  func(ast.Expression) ast.Expression
 )
 
+func (p *Parser) Errors() []string {
+	return p.errors
+}
+
 func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
 	// defer untrace(trace("parseExpressionStatement"))
 
