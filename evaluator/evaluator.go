@@ -1,7 +1,6 @@
 package evaluator
 
 import (
-	"fmt"
 	"monkey/ast"
 	"monkey/object"
 )
@@ -16,7 +15,7 @@ func Eval(node ast.Node) object.Object {
 	switch node := node.(type) {
 	// Statements
 	case *ast.Program:
-		return evalStatements(node.Statements)
+		return evalProgram(node.Statements)
 	case *ast.ExpressionStatement:
 		return Eval(node.Expression)
 	// Expressions
@@ -32,24 +31,25 @@ func Eval(node ast.Node) object.Object {
 		right := Eval(node.Right)
 		return evalInfixExpression(node.Operator, left, right)
 	case *ast.BlockStatement:
-		return evalStatements(node.Statements)
+		return evalBlockStatement(node)
 	case *ast.IfExpression:
 		return evalIfExpression(node)
 	// Statements
 	case *ast.ReturnStatement:
-		fmt.Println(node, "ret", node.ReturnValue)
 		val := Eval(node.ReturnValue)
 		return &object.ReturnValue{Value: val}
 	}
+
 	return nil
 }
 
 // Returns the evaluation result of the whole statements.
-func evalStatements(stmts []ast.Statement) object.Object {
+func evalProgram(program []ast.Statement) object.Object {
 	var result object.Object
-	for _, stmt := range stmts {
+	for _, stmt := range program {
 		result = Eval(stmt)
 
+		// TODO: To be modified. This ends the program, which is not expected.
 		if returnValue, ok := result.(*object.ReturnValue); ok {
 			return returnValue.Value
 		}
@@ -156,4 +156,17 @@ func isTruthy(obj object.Object) bool {
 		return false
 	}
 	return true
+}
+
+func evalBlockStatement(block *ast.BlockStatement) object.Object {
+	var result object.Object
+
+	for _, stmt := range block.Statements {
+		result = Eval(stmt)
+
+		if result != nil && result.Type() == object.RETURN_VALUE_OBJ {
+			return result
+		}
+	}
+	return result
 }
