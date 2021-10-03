@@ -50,9 +50,11 @@ func evalProgram(program []ast.Statement) object.Object {
 	for _, stmt := range program {
 		result = Eval(stmt)
 
-		// TODO: To be modified. This ends the program, which is not expected.
-		if returnValue, ok := result.(*object.ReturnValue); ok {
-			return returnValue.Value
+		switch result := result.(type) {
+		case *object.ReturnValue:
+			return result.Value
+		case *object.Error:
+			return result
 		}
 	}
 	return result
