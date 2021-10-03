@@ -1,6 +1,7 @@
 package evaluator
 
 import (
+	"fmt"
 	"monkey/ast"
 	"monkey/object"
 )
@@ -34,15 +35,24 @@ func Eval(node ast.Node) object.Object {
 		return evalStatements(node.Statements)
 	case *ast.IfExpression:
 		return evalIfExpression(node)
+	// Statements
+	case *ast.ReturnStatement:
+		fmt.Println(node, "ret", node.ReturnValue)
+		val := Eval(node.ReturnValue)
+		return &object.ReturnValue{Value: val}
 	}
 	return nil
 }
 
-// TODO: This method returns the object of the last statement of the given statements.
+// Returns the evaluation result of the whole statements.
 func evalStatements(stmts []ast.Statement) object.Object {
 	var result object.Object
 	for _, stmt := range stmts {
 		result = Eval(stmt)
+
+		if returnValue, ok := result.(*object.ReturnValue); ok {
+			return returnValue.Value
+		}
 	}
 	return result
 }
