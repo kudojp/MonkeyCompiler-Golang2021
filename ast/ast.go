@@ -92,7 +92,6 @@ type ExpressionStatement struct {
 func (es *ExpressionStatement) statementNode()       {}
 func (es *ExpressionStatement) TokenLiteral() string { return es.Token.Literal }
 func (es *ExpressionStatement) String() string {
-	// TODO: Update this method!
 	if es.Expression != nil {
 		return es.Expression.String()
 	}
@@ -117,6 +116,15 @@ type IntegerLiteral struct {
 func (il *IntegerLiteral) expressionNode()      {}
 func (il *IntegerLiteral) TokenLiteral() string { return il.Token.Literal }
 func (il *IntegerLiteral) String() string       { return il.Token.Literal }
+
+type StringLiteral struct {
+	Token token.Token
+	Value string
+}
+
+func (sl *StringLiteral) expressionNode()      {}
+func (sl *StringLiteral) TokenLiteral() string { return sl.Token.Literal }
+func (sl *StringLiteral) String() string       { return sl.Token.Literal }
 
 type Boolean struct {
 	Token token.Token
@@ -230,14 +238,14 @@ func (fl *FunctionLiteral) String() string {
 }
 
 type CallExpression struct {
-	Token token.Token // (
-	Function Expression // Identifier or FunctionLiteral
+	Token     token.Token // (
+	Function  Expression  // Identifier or FunctionLiteral
 	Arguments []Expression
 }
 
-func(ce *CallExpression) expressionNode() {}
-func(ce *CallExpression) TokenLiteral() string { return ce.Token.Literal }
-func(ce *CallExpression) String() string {
+func (ce *CallExpression) expressionNode()      {}
+func (ce *CallExpression) TokenLiteral() string { return ce.Token.Literal }
+func (ce *CallExpression) String() string {
 	var out bytes.Buffer
 	args := []string{}
 	for _, a := range ce.Arguments {
