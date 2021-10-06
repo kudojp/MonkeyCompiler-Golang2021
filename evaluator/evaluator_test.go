@@ -1,7 +1,6 @@
 package evaluator
 
 import (
-	"fmt"
 	"monkey/lexer"
 	"monkey/object"
 	"monkey/parser"
@@ -33,6 +32,21 @@ func TestEvalIntegerExpression(t *testing.T) {
 	for _, tt := range tests {
 		evaluated := testEval(tt.input)
 		testIntegerObject(t, evaluated, tt.expected)
+	}
+}
+
+func TestEvalStringExpression(t *testing.T) {
+	input := `"Hello World!"`
+
+	evaluated := testEval(input)
+	str, ok := evaluated.(*object.String)
+
+	if !ok {
+		t.Fatalf("object is not String. got=%T (%+v)", evaluated, evaluated)
+	}
+
+	if str.Value != "Hello World!" {
+		t.Fatalf("String has wrong value. got=%q", str.Value)
 	}
 }
 
@@ -250,7 +264,7 @@ func TestFunctionApplication(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		fmt.Print(tt)
+		// fmt.Print(tt)
 		testIntegerObject(t, testEval(tt.input), tt.expected)
 	}
 }

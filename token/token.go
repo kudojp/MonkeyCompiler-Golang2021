@@ -12,8 +12,9 @@ const (
 	EOF     = "EOF"
 
 	// identifier + literal
-	IDENT = "IDENT" // 変数名「である」
-	INT   = "INT"   // 整数「である」
+	IDENT  = "IDENT" // 変数名「である」
+	INT    = "INT"   // 整数「である」
+	STRING = "STRING"
 
 	// operators
 	ASSIGN   = "="
