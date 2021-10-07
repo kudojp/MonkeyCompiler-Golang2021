@@ -109,6 +109,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefixFn(token.MINUS, p.parsePrefixExpression)
 	p.registerPrefixFn(token.LPAREN, p.parseGroupedExpression)
 	p.registerPrefixFn(token.IF, p.parseIfExpression)
+	p.registerPrefixFn(token.LBRACKET, p.parseArrayLiteral)
 
 	p.infixParseFns = make(map[token.TokenType]infixParseFn)
 	p.registerInfixFn(token.PLUS, p.parseInfixExpression)
@@ -260,6 +261,12 @@ func (p *Parser) parseIfExpression() ast.Expression {
 	p.nextToken()
 
 	return expression
+}
+
+func (p *Parser) parseArrayLiteral() ast.Expression {
+	array := &ast.ArrayLiteral{Token: p.curToken}
+	array.Elements = p.parseExpressionList(token.RBRACKET)
+	return array
 }
 
 func (p *Parser) parseBlockStatement() *ast.BlockStatement {
