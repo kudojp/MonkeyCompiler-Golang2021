@@ -82,11 +82,13 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.LBRACKET, l.ch)
 	case ']':
 		tok = newToken(token.RBRACKET, l.ch)
+	case ':':
+		tok = newToken(token.COLON, l.ch)
 	case '"':
 		tok.Type = token.STRING
 		tok.Literal = l.readString()
-	// 0 is NULL in ASCII.
-	// That is, you are at the end of file or have not read anything.
+		// 0 is NULL in ASCII.
+		// That is, you are at the end of file or have not read anything.
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF
