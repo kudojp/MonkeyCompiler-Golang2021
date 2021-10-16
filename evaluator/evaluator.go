@@ -89,7 +89,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 // Returns the evaluation result of the whole statements.
 func evalProgram(program []ast.Statement, env *object.Environment) object.Object {
 	var result object.Object
-	for _, stmt := range program {
+	for _, stmt := range program { // Multiple statements can exist in one line.
 		result = Eval(stmt, env)
 
 		switch result := result.(type) {
