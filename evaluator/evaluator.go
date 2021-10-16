@@ -81,15 +81,30 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 			return args[0]
 		}
 		return applyFunction(function, args)
+	case *ast.ArrayLiteral:
+		elements := evalExpressions(node.Elements, env)
+		if len(elements) == 1 && isError(elements[0]) {
+			return elements[0]
+		}
+		return &object.Array{Elements: elements}
+	case *ast.IndexExpression:
+		left := Eval(node.Left, env)
+		if isError(left) {
+			return left
+		}
+		index := Eval(node.Index, env)
+		if isError(index) {
+			return index
+		}
+		return evalIndexExpression(left, index)
 	}
-
 	return nil
 }
 
 // Returns the evaluation result of the whole statements.
 func evalProgram(program []ast.Statement, env *object.Environment) object.Object {
 	var result object.Object
-	for _, stmt := range program {
+	for _, stmt := range program { // Multiple statements can exist in one line.
 		result = Eval(stmt, env)
 
 		switch result := result.(type) {
@@ -289,6 +304,26 @@ func unwrapReturnValue(obj object.Object) object.Object {
 
 func newError(format string, a ...interface{}) *object.Error {
 	return &object.Error{Message: fmt.Sprintf(format, a...)}
+}
+
+func evalIndexExpression(left, index object.Object) object.Object {
+	switch {
+	case left.Type() == object.ARRAY_OBJ && index.Type() == object.INTEGER_OBJ:
+		return evalArrayIndexExpression(left, index)
+	default:
+		return newError("index operator not supported: %s", left.Type())
+	}
+}
+
+func evalArrayIndexExpression(array, index object.Object) object.Object {
+	arrayObject := array.(*object.Array)
+	idx := index.(*object.Integer).Value
+	max := int64(len(arrayObject.Elements) - 1)
+
+	if idx < 0 || max < idx {
+		return NULL
+	}
+	return arrayObject.Elements[idx]
 }
 
 func isError(obj object.Object) bool {
