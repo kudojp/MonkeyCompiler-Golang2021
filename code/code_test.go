@@ -62,9 +62,10 @@ func TestReadOperands(t *testing.T) {
 	tests := []struct {
 		op        Opcode
 		operands  []int
-		bytesRead int      // expected
+		bytesRead int // expected
 	}{
 		{OpConstant, []int{65535}, 2},
+		{OpAdd, []int{}, 0},
 	}
 
 	for _, tt := range tests {
