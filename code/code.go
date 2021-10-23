@@ -1,6 +1,9 @@
 package code
 
-import "fmt"
+import (
+	"encoding/binary"
+	"fmt"
+)
 
 type Instructions []byte
 type Opcode byte
@@ -28,8 +31,29 @@ func Lookup(op byte) (*Definition, error) {
 }
 
 /*
-Build byte array (instrcutions) from Opcode + Operands
+Build byte array (instrcution) from Opcode + Operands
 */
 func Make(op Opcode, operands ...int) []byte {
-	return nil
+	def, ok := definitions[op]
+	if !ok {
+		return []byte{}
+	}
+
+	instructionLen := 1
+	for _, w := range def.OperandWidths {
+		instructionLen += w
+	}
+
+	instruction := make([]byte, instructionLen)
+	instruction[0] = byte(op)
+
+	offset := 1
+	for i, o := range operands {
+		width := def.OperandWidths[i]
+		switch width {
+		case 2:
+			binary.BigEndian.PutUint16(instruction[offset:], uint16(o))
+		}
+	}
+	return instruction
 }
