@@ -40,7 +40,7 @@ func runVmTests(t *testing.T, tests []vmTestCase) {
 		// Assume that the logic till here (till compiling) is right.
 
 		vm := New(comp.ByteCode())
-		err := vm.Run()
+		err = vm.Run()
 		if err != nil {
 			t.Fatalf("vm error: %s", err)
 		}
