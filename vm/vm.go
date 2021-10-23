@@ -16,6 +16,13 @@ type VM struct {
 	sp    int // Always point to the next value. Top of stack is stack[sp-1]
 }
 
+func (vm *VM) StackTop() object.Object {
+	if vm.sp == 0 {
+		return nil
+	}
+	return vm.stack[vm.sp-1]
+}
+
 func New(bytecode *compiler.Bytecode) *VM {
 	return &VM{
 		instructions: bytecode.Instructions,
