@@ -6,6 +6,11 @@ import (
 )
 
 type Instructions []byte
+
+func (i *Instructions) String() string {
+	return ""
+}
+
 type Opcode byte
 
 const (
