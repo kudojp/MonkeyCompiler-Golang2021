@@ -15,6 +15,18 @@ type vmTestCase struct {
 	expected interface{}
 }
 
+func TestIntegerArithmetic(t *testing.T) {
+	tests := []vmTestCase{
+		{"1", 1},
+		{"2", 2},
+		{"1 + 2", 2}, // FIXME
+	}
+	runVmTests(t, tests)
+}
+
+/*
+Tests the top element in the stack.
+*/
 func runVmTests(t *testing.T, tests []vmTestCase) {
 	t.Helper()
 
