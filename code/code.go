@@ -62,3 +62,8 @@ func Make(op Opcode, operands ...int) []byte {
 	}
 	return instruction
 }
+
+// Used in Instructions#String()
+func ReadOperands(def *Definition, ins Instructions) ([]int, int) {
+	return []int{}, 0
+}
