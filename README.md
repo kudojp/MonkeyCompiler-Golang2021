@@ -27,3 +27,13 @@ I created a Monkey compiler + VM with this book.
 
 - Byte code = opcode + operands
   - Constants are held as an object in a constant pool (slice) and the byte code has an index of that as an operand (instead of embedding the values directly in the bytecode).
+
+Compiler:
+
+- creates bytecode from ast
+- creates a constant pool as an array of objects
+
+VM:
+
+- creates objects from bytecode
+- uses the constant pool built in the compiler
