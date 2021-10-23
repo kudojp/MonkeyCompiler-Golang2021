@@ -1,4 +1,4 @@
-This readme would be tidied up after I finishing reading both of the books. Sorry for the mess for now!
+This readme would be tidied up after I finish reading both of the books. Sorry for the mess for now!
 
 # Monkey Compiler In Go
 
