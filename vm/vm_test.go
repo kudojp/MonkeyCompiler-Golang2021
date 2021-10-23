@@ -3,15 +3,56 @@ package vm
 import (
 	"fmt"
 	"monkey/ast"
+	"monkey/compiler"
 	"monkey/lexer"
 	"monkey/object"
 	"monkey/parser"
+	"testing"
 )
+
+type vmTestCase struct {
+	input    string
+	expected interface{}
+}
+
+func runVmTests(t *testing.T, tests []vmTestCase) {
+	t.Helper()
+
+	for _, tt := range tests {
+		program := parse(tt.input)
+		comp := compiler.New()
+		err := comp.Compile(program)
+		if err != nil {
+			t.Fatalf("compiler error: %s", err)
+		}
+		// Assume that the logic till here (till compiling) is right.
+
+		vm := New(comp.ByteCode())
+		err := vm.Run()
+		if err != nil {
+			t.Fatalf("vm error: %s", err)
+		}
+		stackElem := vm.StackTop()
+		testExpectedObject(t, tt.expected, stackElem)
+	}
+}
 
 func parse(input string) *ast.Program {
 	l := lexer.New(input)
 	p := parser.New(l)
 	return p.ParseProgram()
+}
+
+func testExpectedObject(t *testing.T, expected interface{}, actual object.Object) {
+	t.Helper()
+
+	switch expected := expected.(type) {
+	case int:
+		err := testIntegerObject(int64(expected), actual)
+		if err != nil {
+			t.Errorf("testIntegerObject failed: %s", err)
+		}
+	}
 }
 
 func testIntegerObject(expected int64, actual object.Object) error {
