@@ -42,8 +42,10 @@ func (vm *VM) Run() error {
 			left := vm.pop()
 			leftVal := left.(*object.Integer).Value
 
-			vm.push(&object.Integer{Value: rightVal + leftVal})
-			return nil
+			err := vm.push(&object.Integer{Value: rightVal + leftVal})
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil
