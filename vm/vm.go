@@ -1,6 +1,7 @@
 package vm
 
 import (
+	"fmt"
 	"monkey/code"
 	"monkey/compiler"
 	"monkey/object"
@@ -21,6 +22,33 @@ func (vm *VM) StackTop() object.Object {
 		return nil
 	}
 	return vm.stack[vm.sp-1]
+}
+
+func (vm *VM) Run() error {
+	for ip := 0; ip < len(vm.instructions); ip++ {
+		op := code.Opcode(vm.instructions[ip])
+		switch op {
+		case code.OpConstant:
+			constIndex := code.ReadUint16(vm.instructions[ip+1:])
+			ip += 2
+
+			err := vm.push(vm.constants[constIndex])
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func (vm *VM) push(o object.Object) error {
+	if vm.sp >= StackSize {
+		return fmt.Errorf("stack overflow")
+	}
+
+	vm.stack[vm.sp] = o
+	vm.sp += 1
+	return nil
 }
 
 func New(bytecode *compiler.Bytecode) *VM {
