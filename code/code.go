@@ -26,3 +26,10 @@ func Lookup(op byte) (*Definition, error) {
 
 	return def, nil
 }
+
+/*
+Build byte array (instrcutions) from Opcode + Operands
+*/
+func Make(op Opcode, operands ...int) []byte {
+	return nil
+}
