@@ -6,6 +6,44 @@ import (
 	"fmt"
 )
 
+type Opcode byte
+
+const (
+	OpConstant Opcode = iota
+	OpTrue
+	OpFalse
+	OpAdd
+	OpSub
+	OpMul
+	OpDiv
+	OpPop
+)
+
+type Definition struct {
+	Name          string
+	OperandWidths []int
+}
+
+var definitions = map[Opcode]*Definition{
+	OpConstant: {"OpConstant", []int{2}}, // Thus, up to 65536 constants could be defied.
+	OpTrue:     {"OpTrue", []int{}},
+	OpFalse:    {"OpFalse", []int{}},
+	OpAdd:      {"OpAdd", []int{}},
+	OpSub:      {"OpSub", []int{}},
+	OpMul:      {"OpMul", []int{}},
+	OpDiv:      {"OpDiv", []int{}},
+	OpPop:      {"OpPop", []int{}},
+}
+
+func Lookup(op byte) (*Definition, error) {
+	def, ok := definitions[Opcode(op)]
+	if !ok {
+		return nil, fmt.Errorf("opcode %d undefined", op)
+	}
+
+	return def, nil
+}
+
 type Instructions []byte
 
 func (ins Instructions) String() string {
@@ -45,44 +83,6 @@ func (ins Instructions) fmtInstruction(def *Definition, operands []int) string {
 	}
 
 	return fmt.Sprintf("ERROR: unhandled operandCount for %s\n", def.Name)
-}
-
-type Opcode byte
-
-const (
-	OpConstant Opcode = iota
-	OpTrue
-	OpFalse
-	OpAdd
-	OpSub
-	OpMul
-	OpDiv
-	OpPop
-)
-
-type Definition struct {
-	Name          string
-	OperandWidths []int
-}
-
-var definitions = map[Opcode]*Definition{
-	OpConstant: {"OpConstant", []int{2}}, // Thus, up to 65536 constants could be defied.
-	OpTrue:     {"OpTrue", []int{}},
-	OpFalse:    {"OpFalse", []int{}},
-	OpAdd:      {"OpAdd", []int{}},
-	OpSub:      {"OpSub", []int{}},
-	OpMul:      {"OpMul", []int{}},
-	OpDiv:      {"OpDiv", []int{}},
-	OpPop:      {"OpPop", []int{}},
-}
-
-func Lookup(op byte) (*Definition, error) {
-	def, ok := definitions[Opcode(op)]
-	if !ok {
-		return nil, fmt.Errorf("opcode %d undefined", op)
-	}
-
-	return def, nil
 }
 
 /*
