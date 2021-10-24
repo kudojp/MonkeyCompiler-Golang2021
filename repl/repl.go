@@ -58,8 +58,8 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		stackTop := machine.StackTop()
-		io.WriteString(out, stackTop.Inspect())
+		stackElem := machine.LastPoppedStackElem()
+		io.WriteString(out, stackElem.Inspect())
 		io.WriteString(out, "\n")
 	}
 }
