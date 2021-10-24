@@ -34,6 +34,17 @@ func (c *Compiler) Compile(node ast.Node) error {
 			return err
 		}
 		c.emit(code.OpPop)
+	case *ast.PrefixExpression:
+		switch node.Operator {
+		case "!":
+			c.Compile(node.Right)
+			c.emit(code.OpBang)
+		case "-":
+			c.Compile(node.Right)
+			c.emit(code.OpMinus)
+		default:
+			return fmt.Errorf("unknown operator %s", node.Operator)
+		}
 	case *ast.InfixExpression:
 		if node.Operator == "<" {
 			err := c.Compile(node.Right)
