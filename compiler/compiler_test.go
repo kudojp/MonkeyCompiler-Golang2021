@@ -29,6 +29,36 @@ func TestIntegerArithmetic(t *testing.T) {
 			expectedConstants: []interface{}{1, 2},
 		},
 		{
+			input: "1 - 2",
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpConstant, 0),
+				code.Make(code.OpConstant, 1),
+				code.Make(code.OpSub),
+				code.Make(code.OpPop),
+			},
+			expectedConstants: []interface{}{1, 2},
+		},
+		{
+			input: "1 * 2",
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpConstant, 0),
+				code.Make(code.OpConstant, 1),
+				code.Make(code.OpMul),
+				code.Make(code.OpPop),
+			},
+			expectedConstants: []interface{}{1, 2},
+		},
+		{
+			input: "2 / 1",
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpConstant, 0),
+				code.Make(code.OpConstant, 1),
+				code.Make(code.OpDiv),
+				code.Make(code.OpPop),
+			},
+			expectedConstants: []interface{}{2, 1},
+		},
+		{
 			input: "1; 2;",
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpConstant, 0),
@@ -37,6 +67,88 @@ func TestIntegerArithmetic(t *testing.T) {
 				code.Make(code.OpPop),
 			},
 			expectedConstants: []interface{}{1, 2},
+		},
+	}
+	runCompilerTest(t, tests)
+}
+
+func TestBooleanExpressions(t *testing.T) {
+	tests := []compilerTestCase{
+		{
+			input: "true",
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpTrue),
+				code.Make(code.OpPop),
+			},
+			expectedConstants: []interface{}{},
+		},
+		{
+			input: "false",
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpFalse),
+				code.Make(code.OpPop),
+			},
+			expectedConstants: []interface{}{},
+		},
+		{
+			input: "1 > 2",
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpConstant, 0),
+				code.Make(code.OpConstant, 1),
+				code.Make(code.OpGreaterThan),
+				code.Make(code.OpPop),
+			},
+			expectedConstants: []interface{}{1, 2},
+		},
+		{
+			input: "1 < 2",
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpConstant, 0),
+				code.Make(code.OpConstant, 1),
+				code.Make(code.OpGreaterThan),
+				code.Make(code.OpPop),
+			},
+			expectedConstants: []interface{}{2, 1}, // pushing order reversed
+		},
+		{
+			input: "1 == 2",
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpConstant, 0),
+				code.Make(code.OpConstant, 1),
+				code.Make(code.OpEqual),
+				code.Make(code.OpPop),
+			},
+			expectedConstants: []interface{}{1, 2},
+		},
+		{
+			input: "1 != 2",
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpConstant, 0),
+				code.Make(code.OpConstant, 1),
+				code.Make(code.OpNotEqual),
+				code.Make(code.OpPop),
+			},
+			expectedConstants: []interface{}{1, 2},
+		},
+		{
+			input: "true == false",
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpTrue),
+				code.Make(code.OpFalse),
+				code.Make(code.OpEqual),
+				code.Make(code.OpPop),
+			},
+			expectedConstants: []interface{}{},
+		},
+		{
+			input: "true != false",
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpTrue),
+				code.Make(code.OpFalse),
+				code.Make(code.OpNotEqual),
+				code.Make(code.OpPop),
+			},
+			expectedConstants: []interface{}{},
 		},
 	}
 	runCompilerTest(t, tests)
