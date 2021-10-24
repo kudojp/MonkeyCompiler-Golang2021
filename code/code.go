@@ -21,6 +21,8 @@ const (
 	OpGreaterThan
 	// For learning purpose, we don't add OpLesserThan.
 	// We achieve it by using OpGreaterThan with reordering ast nodes when compiling.
+	OpMinus
+	OpBang
 	OpPop
 )
 
@@ -40,6 +42,8 @@ var definitions = map[Opcode]*Definition{
 	OpEqual:       {"OpEqual", []int{}},
 	OpNotEqual:    {"OpNotEqual", []int{}},
 	OpGreaterThan: {"OpGreaterThan", []int{}},
+	OpMinus:       {"OpMinus", []int{}},
+	OpBang:        {"OpBang", []int{}},
 	OpPop:         {"OpPop", []int{}},
 }
 
