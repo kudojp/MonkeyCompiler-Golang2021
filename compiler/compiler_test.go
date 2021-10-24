@@ -68,6 +68,15 @@ func TestIntegerArithmetic(t *testing.T) {
 			},
 			expectedConstants: []interface{}{1, 2},
 		},
+		{
+			input: "-1",
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpConstant, 0),
+				code.Make(code.OpMinus),
+				code.Make(code.OpPop),
+			},
+			expectedConstants: []interface{}{1},
+		},
 	}
 	runCompilerTest(t, tests)
 }
@@ -150,6 +159,15 @@ func TestBooleanExpressions(t *testing.T) {
 			},
 			expectedConstants: []interface{}{},
 		},
+		{
+			input: "!true",
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpTrue),
+				code.Make(code.OpBang),
+				code.Make(code.OpPop),
+			},
+			expectedConstants: []interface{}{},
+		},
 	}
 	runCompilerTest(t, tests)
 }
@@ -197,7 +215,7 @@ func testInstructions(
 		if ins != actual[i] {
 			return fmt.Errorf(
 				"wrong instructions at %d. \nwant=%q, \ngot=%q",
-				i, ins, actual[i],
+				i, concatted, actual,
 			)
 		}
 	}
