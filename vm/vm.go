@@ -51,6 +51,8 @@ func (vm *VM) Run() error {
 			if err != nil {
 				return err
 			}
+		case code.OpPop:
+			vm.pop()
 		}
 	}
 	return nil
