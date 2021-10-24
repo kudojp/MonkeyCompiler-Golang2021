@@ -197,7 +197,7 @@ func testInstructions(
 		if ins != actual[i] {
 			return fmt.Errorf(
 				"wrong instructions at %d. \nwant=%q, \ngot=%q",
-				i, ins, actual[i],
+				i, concatted, actual,
 			)
 		}
 	}
