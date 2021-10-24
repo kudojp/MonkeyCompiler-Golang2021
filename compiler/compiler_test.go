@@ -90,6 +90,66 @@ func TestBooleanExpressions(t *testing.T) {
 			},
 			expectedConstants: []interface{}{},
 		},
+		{
+			input: "1 > 2",
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpConstant, 0),
+				code.Make(code.OpConstant, 1),
+				code.Make(code.OpGreaterThan),
+				code.Make(code.OpPop),
+			},
+			expectedConstants: []interface{}{1, 2},
+		},
+		{
+			input: "1 < 2",
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpConstant, 0),
+				code.Make(code.OpConstant, 1),
+				code.Make(code.OpGreaterThan),
+				code.Make(code.OpPop),
+			},
+			expectedConstants: []interface{}{2, 1}, // pushing order reversed
+		},
+		{
+			input: "1 == 2",
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpConstant, 0),
+				code.Make(code.OpConstant, 1),
+				code.Make(code.OpEqual),
+				code.Make(code.OpPop),
+			},
+			expectedConstants: []interface{}{1, 2},
+		},
+		{
+			input: "1 != 2",
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpConstant, 0),
+				code.Make(code.OpConstant, 1),
+				code.Make(code.OpNotEqual),
+				code.Make(code.OpPop),
+			},
+			expectedConstants: []interface{}{1, 2},
+		},
+		{
+			input: "true == false",
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpTrue),
+				code.Make(code.OpFalse),
+				code.Make(code.OpEqual),
+				code.Make(code.OpPop),
+			},
+			expectedConstants: []interface{}{},
+		},
+		{
+			input: "true != false",
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpTrue),
+				code.Make(code.OpFalse),
+				code.Make(code.OpNotEqual),
+				code.Make(code.OpPop),
+			},
+			expectedConstants: []interface{}{},
+		},
 	}
 	runCompilerTest(t, tests)
 }
