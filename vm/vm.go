@@ -24,6 +24,11 @@ func (vm *VM) StackTop() object.Object {
 	return vm.stack[vm.sp-1]
 }
 
+// invalid if the last operation was, say, pushing.
+func (vm *VM) LastPoppedStackElem() object.Object {
+	return vm.stack[vm.sp]
+}
+
 func (vm *VM) Run() error {
 	for ip := 0; ip < len(vm.instructions); ip++ {
 		op := code.Opcode(vm.instructions[ip])
@@ -46,6 +51,8 @@ func (vm *VM) Run() error {
 			if err != nil {
 				return err
 			}
+		case code.OpPop:
+			vm.pop()
 		}
 	}
 	return nil
