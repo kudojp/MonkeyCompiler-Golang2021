@@ -8,14 +8,23 @@ import (
 )
 
 type Compiler struct {
-	instructions code.Instructions
-	constants    []object.Object
+	instructions        code.Instructions
+	constants           []object.Object
+	lastInstruction     EmittedInstruction
+	previousInstruction EmittedInstruction
+}
+
+type EmittedInstruction struct {
+	Opcode   code.Opcode
+	Position int
 }
 
 func New() *Compiler {
 	return &Compiler{
-		instructions: code.Instructions{},
-		constants:    []object.Object{},
+		instructions:        code.Instructions{},
+		constants:           []object.Object{},
+		lastInstruction:     EmittedInstruction{},
+		previousInstruction: EmittedInstruction{},
 	}
 }
 
@@ -110,6 +119,8 @@ Returns an index of the newly added opcode.
 func (c *Compiler) emit(op code.Opcode, operands ...int) int {
 	ins := code.Make(op, operands...)
 	pos := c.addInstruction(ins)
+
+	c.setLastInstruction(op, pos)
 	return pos
 }
 
@@ -121,6 +132,14 @@ func (c *Compiler) addInstruction(ins []byte) int {
 	posNewInstruction := len(c.instructions)
 	c.instructions = append(c.instructions, ins...)
 	return posNewInstruction
+}
+
+func (c *Compiler) setLastInstruction(op code.Opcode, pos int) {
+	previous := c.lastInstruction
+	last := EmittedInstruction{Opcode: op, Position: pos}
+
+	c.previousInstruction = previous
+	c.lastInstruction = last
 }
 
 type Bytecode struct {
