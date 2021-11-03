@@ -51,7 +51,9 @@ func TestBooleanExpressions(t *testing.T) {
 		{"!false", true},
 		{"!5", false}, // In our specification, everything other than False are treated as truthy.
 		{"!!5", true},
-		{"!(if(false){ 5; })", true},
+		{"!(if(false){ 5; })", true},                // To test !Null to be treated as true
+		{"if (if(false){ 5; }) {10} else {20}", 20}, // To test nil to be treated as false
+
 	}
 	runVmTests(t, tests)
 }
