@@ -24,6 +24,9 @@ const (
 	OpMinus
 	OpBang
 	OpPop
+	OpJumpNotTruthy
+	OpJump
+	OpNull
 )
 
 type Definition struct {
@@ -32,19 +35,22 @@ type Definition struct {
 }
 
 var definitions = map[Opcode]*Definition{
-	OpConstant:    {"OpConstant", []int{2}}, // Thus, up to 65536 constants could be defied.
-	OpTrue:        {"OpTrue", []int{}},
-	OpFalse:       {"OpFalse", []int{}},
-	OpAdd:         {"OpAdd", []int{}},
-	OpSub:         {"OpSub", []int{}},
-	OpMul:         {"OpMul", []int{}},
-	OpDiv:         {"OpDiv", []int{}},
-	OpEqual:       {"OpEqual", []int{}},
-	OpNotEqual:    {"OpNotEqual", []int{}},
-	OpGreaterThan: {"OpGreaterThan", []int{}},
-	OpMinus:       {"OpMinus", []int{}},
-	OpBang:        {"OpBang", []int{}},
-	OpPop:         {"OpPop", []int{}},
+	OpConstant:      {"OpConstant", []int{2}}, // Thus, up to 65536 constants could be defied.
+	OpTrue:          {"OpTrue", []int{}},
+	OpFalse:         {"OpFalse", []int{}},
+	OpAdd:           {"OpAdd", []int{}},
+	OpSub:           {"OpSub", []int{}},
+	OpMul:           {"OpMul", []int{}},
+	OpDiv:           {"OpDiv", []int{}},
+	OpEqual:         {"OpEqual", []int{}},
+	OpNotEqual:      {"OpNotEqual", []int{}},
+	OpGreaterThan:   {"OpGreaterThan", []int{}},
+	OpMinus:         {"OpMinus", []int{}},
+	OpBang:          {"OpBang", []int{}},
+	OpPop:           {"OpPop", []int{}},
+	OpJumpNotTruthy: {"OpJumpNotTruthy", []int{2}},
+	OpJump:          {"OpJump", []int{2}},
+	OpNull:          {"OpNull", []int{}},
 }
 
 func Lookup(op byte) (*Definition, error) {
