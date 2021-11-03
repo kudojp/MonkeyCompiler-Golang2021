@@ -262,7 +262,6 @@ func (p *Parser) parseIfExpression() ast.Expression {
 		}
 		expression.Alternative = p.parseBlockStatement()
 	}
-	p.nextToken()
 
 	return expression
 }
