@@ -103,6 +103,31 @@ func (c *Compiler) Compile(node ast.Node) error {
 		} else {
 			c.emit(code.OpFalse)
 		}
+	case *ast.IfExpression:
+		err := c.Compile(node.Condition)
+		if err != nil {
+			return err
+		}
+
+		// Use backpatching here.
+		// Emit an `OpJumpNotTruthy` with a bogus value.
+		c.emit(code.OpJumpNotTruthy, 9999)
+
+		err = c.Compile(node.Consequence)
+		if err != nil {
+			return err
+		}
+
+		if c.lastInstructionIsPop() {
+			c.removeLastPop()
+		}
+	case *ast.BlockStatement:
+		for _, s := range node.Statements {
+			err := c.Compile(s)
+			if err != nil {
+				return err
+			}
+		}
 	}
 	return nil
 }
@@ -140,6 +165,17 @@ func (c *Compiler) setLastInstruction(op code.Opcode, pos int) {
 
 	c.previousInstruction = previous
 	c.lastInstruction = last
+}
+
+func (c *Compiler) lastInstructionIsPop() bool {
+	return c.lastInstruction.Opcode == code.OpPop
+}
+
+func (c *Compiler) removeLastPop() {
+	c.instructions = c.instructions[:c.lastInstruction.Position]
+	// By holding previousInstruction in Compiler,
+	// we can always sync lastInstruction (even soon after popping the last Instruction).
+	c.lastInstruction = c.previousInstruction
 }
 
 type Bytecode struct {
