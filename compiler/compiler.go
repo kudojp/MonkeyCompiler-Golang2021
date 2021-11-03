@@ -122,28 +122,26 @@ func (c *Compiler) Compile(node ast.Node) error {
 			c.removeLastPop()
 		}
 
-		if node.Alternative == nil {
-			afterConsequencePos := len(c.instructions)
-			c.changeOperand(jumpNotTruthyPos, afterConsequencePos)
-		} else {
-			// Use backpatching here.
-			jumpPos := c.emit(code.OpJump, 9999)
-			// Does not reach here when condition is evaluated to be true.
-			afterConsequencePos := len(c.instructions)
-			c.changeOperand(jumpNotTruthyPos, afterConsequencePos)
+		// Use backpatching here.
+		jumpPos := c.emit(code.OpJump, 9999)
 
-			err := c.Compile(node.Alternative)
+		afterConsequencePos := len(c.instructions)
+		c.changeOperand(jumpNotTruthyPos, afterConsequencePos)
+
+		// Does not reach here in vm when condition is evaluated to be true.
+		if node.Alternative == nil {
+			c.emit(code.OpNull)
+		} else {
+			err = c.Compile(node.Alternative)
 			if err != nil {
 				return err
 			}
-
 			if c.lastInstructionIsPop() {
 				c.removeLastPop()
 			}
-
-			afterAlternativePos := len(c.instructions)
-			c.changeOperand(jumpPos, afterAlternativePos)
 		}
+		afterAlternativePos := len(c.instructions)
+		c.changeOperand(jumpPos, afterAlternativePos)
 	case *ast.BlockStatement:
 		for _, s := range node.Statements {
 			err := c.Compile(s)
