@@ -24,6 +24,11 @@ func (s *SymbolTable) Define(name string) Symbol {
 	return symbol
 }
 
+func (s *SymbolTable) Resolve(name string) (Symbol, bool) {
+	obj, ok := s.store[name]
+	return obj, ok
+}
+
 func NewSymbolTable() *SymbolTable {
 	s := make(map[string]Symbol)
 	return &SymbolTable{store: s}
