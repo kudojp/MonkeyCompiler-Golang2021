@@ -316,6 +316,30 @@ func TestDefine(t *testing.T) {
 	}
 }
 
+func TestResolveGlobal(t *testing.T) {
+	global := NewSymbolTable()
+	global.Define("a")
+	global.Define("b")
+
+	expected := []Symbol{
+		{Name: "a", Scope: GlobalScope, Index: 0},
+		{Name: "b", Scope: GlobalScope, Index: 1},
+	}
+
+	for _, sym := range expected {
+		result, ok := global.Resolve(sym.Name)
+		if !ok {
+			t.Errorf("name %s not resolvable", sym.Name)
+		}
+		if result != sym {
+			t.Errorf(
+				"expected %s to resolve to %+v, got=%+v",
+				sym.Name, sym, result,
+			)
+		}
+	}
+}
+
 func runCompilerTest(t *testing.T, tests []compilerTestCase) {
 	t.Helper()
 
