@@ -31,7 +31,7 @@ func New() *Compiler {
 }
 
 // Used for REPL.
-func NewWithState(s *SymbolTable, constants []object.Object) *Compiler{
+func NewWithState(s *SymbolTable, constants []object.Object) *Compiler {
 	compiler := New()
 	compiler.symbolTable = s
 	compiler.constants = constants
@@ -107,6 +107,9 @@ func (c *Compiler) Compile(node ast.Node) error {
 	case *ast.IntegerLiteral:
 		integer := &object.Integer{Value: node.Value}
 		c.emit(code.OpConstant, c.addConstant(integer))
+	case *ast.StringLiteral:
+		str := &object.String{Value: node.Value}
+		c.emit(code.OpConstant, c.addConstant(str))
 	case *ast.Boolean:
 		if node.Value {
 			c.emit(code.OpTrue)
