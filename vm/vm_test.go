@@ -200,19 +200,19 @@ func testExpectedObject(t *testing.T, expected interface{}, actual object.Object
 		}
 	case map[object.HashKey]int64:
 		hash, ok := actual.(*object.Hash)
-		if !ok{
+		if !ok {
 			t.Errorf("object is not Hash. got=%T(%+v)", actual, actual)
 			return
 		}
-		if len(hash.Pairs) != len(expected){
+		if len(hash.Pairs) != len(expected) {
 			t.Errorf(
 				"hash has wrong number of Pairs. want=%d, got=%d",
 				len(expected), len(hash.Pairs),
 			)
 		}
-		for expectedKey, expectedValue := range expected{
+		for expectedKey, expectedValue := range expected {
 			pair, ok := hash.Pairs[expectedKey]
-			if !ok{
+			if !ok {
 				t.Errorf("no pair for given key in Pairs.")
 			}
 			err := testIntegerObject(expectedValue, pair.Value)
