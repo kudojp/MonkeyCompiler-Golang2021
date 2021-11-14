@@ -538,6 +538,18 @@ func TestFunctions(t *testing.T) {
 				code.Make(code.OpPop),
 			},
 		},
+		{
+			input: `fn(){}`, // there's nothing to be returned.
+			expectedConstants: []interface{}{
+				[]code.Instructions{
+					code.Make(code.OpReturn),
+				},
+			},
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpConstant, 0),
+				code.Make(code.OpPop),
+			},
+		},
 	}
 	runCompilerTest(t, tests)
 }
