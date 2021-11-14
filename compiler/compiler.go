@@ -246,7 +246,7 @@ func (c *Compiler) Compile(node ast.Node) error {
 	case *ast.FunctionLiteral:
 		c.enterScope()
 		err := c.Compile(node.Body)
-		if err != nil{
+		if err != nil {
 			return err
 		}
 		instructions := c.leaveScope()
@@ -255,7 +255,7 @@ func (c *Compiler) Compile(node ast.Node) error {
 		c.emit(code.OpConstant, c.addConstant(compiledFn))
 	case *ast.ReturnStatement:
 		err := c.Compile(node.ReturnValue)
-		if err != nil{
+		if err != nil {
 			return err
 		}
 		c.emit(code.OpReturnValue)
