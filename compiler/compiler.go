@@ -47,6 +47,9 @@ func NewWithState(s *SymbolTable, constants []object.Object) *Compiler {
 	return compiler
 }
 
+func (c *Compiler) enterScope()                   {}             // TODO
+func (c *Compiler) leaveScope() code.Instructions { return nil } // TODO
+
 func (c *Compiler) Compile(node ast.Node) error {
 	switch node := node.(type) {
 	case *ast.Program:
