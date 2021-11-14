@@ -145,6 +145,19 @@ func TestHashIndexExpressions(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+func TestCallingFunctionsWithoutArguments(t *testing.T) {
+	tests := []vmTestCase{
+		{
+			input: `
+			let fivePlusTen = fn() {5+10;};
+			fivePlusTen();
+			`,
+			expected: 15,
+		},
+	}
+	runVmTests(t, tests)
+}
+
 /*
 Tests the top element in the stack.
 */
