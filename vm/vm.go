@@ -164,6 +164,16 @@ func (vm *VM) pop() object.Object {
 	return o
 }
 
+func (vm *VM) push(o object.Object) error {
+	if vm.sp >= StackSize {
+		return fmt.Errorf("stack overflow")
+	}
+
+	vm.stack[vm.sp] = o
+	vm.sp += 1
+	return nil
+}
+
 func (vm *VM) executeBinaryOperation(op code.Opcode) error {
 	right := vm.pop()
 	left := vm.pop()
@@ -374,14 +384,4 @@ func (vm *VM) executeHashIndex(hash, key object.Object) error {
 		return vm.push(Null)
 	}
 	return vm.push(pair.Value)
-}
-
-func (vm *VM) push(o object.Object) error {
-	if vm.sp >= StackSize {
-		return fmt.Errorf("stack overflow")
-	}
-
-	vm.stack[vm.sp] = o
-	vm.sp += 1
-	return nil
 }
