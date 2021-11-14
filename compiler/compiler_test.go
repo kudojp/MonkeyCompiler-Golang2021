@@ -682,7 +682,7 @@ func testConstants(
 			err := testInstructions(constant, fn.Instructions)
 			if err != nil {
 				return fmt.Errorf(
-					"constant %d - testInstructions failded: %s",
+					"constant %d - testInstructions failed: %s",
 					i, err,
 				)
 			}
