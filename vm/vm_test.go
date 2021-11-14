@@ -175,6 +175,26 @@ func TestCallingFunctionsWithoutArguments(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+func TestCallingFunctionsWithReturnStatements(t *testing.T) {
+	tests := []vmTestCase{
+		{
+			input: `
+			let earlyExit = fn(){return 99; 100;};
+			earlyExit()
+			`,
+			expected: 99,
+		},
+		{
+			input: `
+			let earlyExit = fn(){return 99; return 100;};
+			earlyExit()
+			`,
+			expected: 99,
+		},
+	}
+	runVmTests(t, tests)
+}
+
 /*
 Tests the top element in the stack.
 */
