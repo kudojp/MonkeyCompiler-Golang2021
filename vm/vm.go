@@ -38,6 +38,9 @@ type VM struct {
 
 	stack []object.Object
 	sp    int // Always point to the next value. Top of stack is stack[sp-1]
+
+	frames      []*Frame
+	framesIndex int
 }
 
 func (vm *VM) StackTop() object.Object {
@@ -384,4 +387,17 @@ func (vm *VM) executeHashIndex(hash, key object.Object) error {
 		return vm.push(Null)
 	}
 	return vm.push(pair.Value)
+}
+
+func (vm *VM) currentFrame() *Frame {
+	return vm.frames[vm.framesIndex-1]
+}
+
+func (vm *VM) pushFrame(f *Frame) {
+	vm.frames[vm.framesIndex] = f
+	vm.framesIndex++
+}
+
+func (vm *VM) popFrame() {
+	vm.framesIndex--
 }
