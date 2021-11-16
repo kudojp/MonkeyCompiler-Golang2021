@@ -133,7 +133,7 @@ func Make(op Opcode, operands ...int) []byte {
 	}
 
 	instructionLen := 1
-	for _, w := range def.OperandWidths {
+	for _, w := range def.OperandWidths { // operand(s) of one opcode can be multiple.
 		instructionLen += w
 	}
 
@@ -144,9 +144,12 @@ func Make(op Opcode, operands ...int) []byte {
 	for i, o := range operands {
 		width := def.OperandWidths[i]
 		switch width {
+		case 1:
+			instruction[offset] = byte(o)
 		case 2:
 			binary.BigEndian.PutUint16(instruction[offset:], uint16(o))
 		}
+		offset += width
 	}
 	return instruction
 }
