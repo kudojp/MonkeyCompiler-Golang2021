@@ -13,6 +13,7 @@ type Symbol struct {
 }
 
 type SymbolTable struct {
+	Outer          *SymbolTable
 	store          map[string]Symbol
 	numDefinitions int
 }
@@ -32,4 +33,10 @@ func (s *SymbolTable) Resolve(name string) (Symbol, bool) {
 func NewSymbolTable() *SymbolTable {
 	s := make(map[string]Symbol)
 	return &SymbolTable{store: s}
+}
+
+func NewEnclosedSymbolTable(outer *SymbolTable) *SymbolTable {
+	s := NewSymbolTable()
+	s.Outer = outer
+	return s
 }
