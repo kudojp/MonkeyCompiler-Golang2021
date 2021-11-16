@@ -43,3 +43,32 @@ func TestResolveGlobal(t *testing.T) {
 		}
 	}
 }
+
+func TestResolveLocal(t *testing.T) {
+	global := NewSymbolTable()
+	global.Define("a")
+	global.Define("b")
+
+	local := NewEnclosedSymbolTable(global)
+	local.Define("c")
+	local.Define("d")
+
+	expected := []Symbol{
+		Symbol{Name: "a", Scope: GlobalScope, Index: 0},
+		Symbol{Name: "b", Scope: GlobalScope, Index: 1},
+		Symbol{Name: "c", Scope: LocalScope, Index: 0},
+		Symbol{Name: "d", Scope: LocalScope, Index: 1},
+	}
+
+	for _, sym := range expected {
+		result, ok := local.Resolve(sym.Name)
+		if !ok {
+			t.Errorf("name %s not resolvable", sym.Name)
+			continue
+		}
+
+		if result != sym {
+			t.Errorf("expected %s to resolve to %+v, got=%+v", sym.Name, sym, result)
+		}
+	}
+}
