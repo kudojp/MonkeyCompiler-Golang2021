@@ -209,7 +209,11 @@ func (c *Compiler) Compile(node ast.Node) error {
 		if !ok {
 			return fmt.Errorf("undefined variable %s", node.Value)
 		}
-		c.emit(code.OpGetGlobal, symbol.Index)
+		if symbol.Scope == GlobalScope {
+			c.emit(code.OpGetGlobal, symbol.Index)
+		} else {
+			c.emit(code.OpGetLocal, symbol.Index)
+		}
 	case *ast.ArrayLiteral:
 		for _, el := range node.Elements {
 			err := c.Compile(el)
