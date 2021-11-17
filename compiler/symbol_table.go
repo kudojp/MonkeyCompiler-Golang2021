@@ -20,7 +20,13 @@ type SymbolTable struct {
 }
 
 func (s *SymbolTable) Define(name string) Symbol {
-	symbol := Symbol{Name: name, Index: s.numDefinitions, Scope: GlobalScope}
+	symbol := Symbol{Name: name, Index: s.numDefinitions}
+	if s.Outer == nil {
+		symbol.Scope = GlobalScope
+	} else {
+		symbol.Scope = LocalScope
+	}
+
 	s.store[name] = symbol
 	s.numDefinitions++
 	return symbol
