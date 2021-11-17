@@ -34,7 +34,10 @@ func (s *SymbolTable) Define(name string) Symbol {
 
 func (s *SymbolTable) Resolve(name string) (Symbol, bool) {
 	obj, ok := s.store[name]
-	return obj, ok
+	if s.Outer == nil || ok {
+		return obj, ok
+	}
+	return s.Outer.Resolve(name)
 }
 
 func NewSymbolTable() *SymbolTable {
