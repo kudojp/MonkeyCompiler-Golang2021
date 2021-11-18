@@ -248,7 +248,7 @@ func TestCallingFunctionsWithBindings(t *testing.T) {
 			// Test that same named local bindings do not affect each other.
 			input: `
 			let firstFooBar = fn(){ let FooBar = 50; FooBar; };
-			let secondFooBar = fn(){ let FooBar = 100; Foobar; };
+			let secondFooBar = fn(){ let FooBar = 100; FooBar; };
 			firstFooBar() + secondFooBar();
 			`,
 			expected: 150,
