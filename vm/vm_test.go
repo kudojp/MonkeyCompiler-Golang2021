@@ -217,6 +217,61 @@ func TestCallingFunctionsWithoutReturnValue(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+func TestCallingFunctionsWithBindings(t *testing.T) {
+	tests := []vmTestCase{
+		{
+			// Test that local binding works in a first place.
+			input: `
+			let one = fn() { let one = 1; one };
+			one();
+			`,
+			expected: 1,
+		},
+		{
+			// Test multiple local bindings in one function.
+			input: `
+			let oneAndTwo = fn(){ let one = 1; let two = 2; one + two };
+			oneAndTwo()
+			`,
+			expected: 3,
+		},
+		{
+			// Test multiple bindings in different functions.
+			input: `
+			let oneAndTwo = fn(){ let one = 1; let two = 2; one + two };
+			let threeAndFour = fn(){ let three = 3; let four = 4; three + four };
+			oneAndTwo() + threeAndFour();
+			`,
+			expected: 10,
+		},
+		{
+			// Test that same named local bindings do not affect each other.
+			input: `
+			let firstFooBar = fn(){ let FooBar = 50; FooBar; };
+			let secondFooBar = fn(){ let FooBar = 100; FooBar; };
+			firstFooBar() + secondFooBar();
+			`,
+			expected: 150,
+		},
+		{
+			input: `
+			let globalSeed = 50;
+			let minusOne = fn(){
+				let num = 1;
+				globalSeed - num;
+			}
+			let minusTwo = fn(){
+				let num = 2;
+				globalSeed - num;
+			}
+			minusOne() + minusTwo()
+			`,
+			expected: 97,
+		},
+	}
+	runVmTests(t, tests)
+}
+
 func TestFirstClassFunctions(t *testing.T) {
 	tests := []vmTestCase{
 		{
