@@ -255,6 +255,12 @@ func (c *Compiler) Compile(node ast.Node) error {
 		c.emit(code.OpIndex)
 	case *ast.FunctionLiteral:
 		c.enterScope()
+		for _, p := range node.Parameters {
+			// Arguments are already put on the bottom of the stack by the caller before calling this function.
+			// So we just have to reserve the indexes here.
+			c.symbolTable.Define(p.Value)
+		}
+
 		err := c.Compile(node.Body)
 		if err != nil {
 			return err
