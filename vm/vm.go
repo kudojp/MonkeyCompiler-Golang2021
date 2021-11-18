@@ -451,6 +451,11 @@ func (vm *VM) pushFrame(f *Frame) {
 	vm.framesIndex++
 }
 
-func (vm *VM) popFrame() {
+/*
+Pop out current frame. Returns a frame which has been popped out.
+*/
+func (vm *VM) popFrame() *Frame {
+	lastFrame := vm.currentFrame()
 	vm.framesIndex--
+	return lastFrame
 }
