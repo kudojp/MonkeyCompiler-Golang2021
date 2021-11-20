@@ -283,7 +283,8 @@ func (c *Compiler) Compile(node ast.Node) error {
 			NumLocals:     numLocals,
 			NumParameters: len(node.Parameters),
 		}
-		c.emit(code.OpConstant, c.addConstant(compiledFn))
+		fnIndex := c.addConstant(compiledFn)
+		c.emit(code.OpClosure, fnIndex, 0) // TODO: put the number of free variables as the second operand.
 	case *ast.ReturnStatement:
 		err := c.Compile(node.ReturnValue)
 		if err != nil {
