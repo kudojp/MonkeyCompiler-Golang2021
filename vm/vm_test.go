@@ -361,7 +361,7 @@ func TestBuiltinFunctions(t *testing.T) {
 		{`len("hello world")`, 11},
 		{
 			`len(1)`,
-			&object.Error{Message: "argument to `len` not supported. got INTEGER"},
+			&object.Error{Message: "argument to `len` not supported, got=INTEGER"},
 		},
 		{`len([1,2,3])`, 3},
 		{`len([])`, 0},
@@ -370,17 +370,17 @@ func TestBuiltinFunctions(t *testing.T) {
 		// first
 		{`first([1,2,3])`, 1},
 		{`first([])`, Null},
-		{`first(1)`, &object.Error{Message: "argument to `first` must be ARRAY, got INTEGER"}},
+		{`first(1)`, &object.Error{Message: "argument to `first` must be ARRAY, got: INTEGER"}},
 		// last
 		{`last([1,2,3])`, 3},
 		{`last([])`, Null},
-		{`last(1)`, &object.Error{Message: "argument to `last` must be ARRAY, got INTEGER"}},
+		{`last(1)`, &object.Error{Message: "argument to `last` must be ARRAY, got: INTEGER"}},
 		// rest
-		{`rest([1,2,3])`, []int{2, 3}},
+		{`rest([1,2,3])`, []int{2, 3}}, // これ
 		{`rest([])`, Null},
 		// push
 		{`push([], 1)`, []int{1}},
-		{`push(1,1)`, &object.Error{Message: "argument to `push` must be ARRAY, got INTEGER"}},
+		{`push(1,1)`, &object.Error{Message: "argument to `push` must be ARRAY, got=INTEGER"}},
 	}
 	runVmTests(t, tests)
 }
