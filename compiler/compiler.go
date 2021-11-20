@@ -215,14 +215,7 @@ func (c *Compiler) Compile(node ast.Node) error {
 		if !ok {
 			return fmt.Errorf("undefined variable %s", node.Value)
 		}
-		switch symbol.Scope {
-		case GlobalScope:
-			c.emit(code.OpGetGlobal, symbol.Index)
-		case LocalScope:
-			c.emit(code.OpGetLocal, symbol.Index)
-		case BuiltinScope:
-			c.emit(code.OpGetBuiltin, symbol.Index)
-		}
+		c.loadSymbol(symbol)
 	case *ast.ArrayLiteral:
 		for _, el := range node.Elements {
 			err := c.Compile(el)
@@ -394,6 +387,17 @@ func (c *Compiler) replaceLastPopWithReturn() {
 	c.replaceInstruction(lastPos, code.Make(code.OpReturnValue))
 
 	c.scopes[c.scopeIndex].lastInstruction.Opcode = code.OpReturnValue
+}
+
+func (c *Compiler) loadSymbol(symbol Symbol) {
+	switch symbol.Scope {
+	case GlobalScope:
+		c.emit(code.OpGetGlobal, symbol.Index)
+	case LocalScope:
+		c.emit(code.OpGetLocal, symbol.Index)
+	case BuiltinScope:
+		c.emit(code.OpGetBuiltin, symbol.Index)
+	}
 }
 
 type Bytecode struct {
