@@ -830,6 +830,36 @@ func TestBuiltins(t *testing.T) {
 	runCompilerTest(t, tests)
 }
 
+func TestDefineResolveBuiltins(t *testing.T) {
+	global := NewSymbolTable()
+	firstLocal := NewEnclosedSymbolTable(global)
+	secondLocal := NewEnclosedSymbolTable(firstLocal)
+
+	expected := []Symbol{
+		Symbol{Name: "a", Scope: BuiltinScope, Index: 0},
+		Symbol{Name: "c", Scope: BuiltinScope, Index: 1},
+		Symbol{Name: "e", Scope: BuiltinScope, Index: 2},
+		Symbol{Name: "f", Scope: BuiltinScope, Index: 3},
+	}
+
+	for i, v := range expected {
+		global.DefineBuiltin(i, v.Name)
+	}
+
+	for _, table := range []*SymbolTable{global, firstLocal, secondLocal} {
+		for _, expected_sym := range expected {
+			result, ok := table.Resolve(expected_sym.Name)
+			if !ok {
+				t.Errorf("name %s not resolvable.", expected_sym.Name)
+			}
+
+			if result != expected_sym {
+				t.Errorf("expected %s to resolve to %+v, got=%+v", expected_sym.Name, expected_sym, result)
+			}
+		}
+	}
+}
+
 func runCompilerTest(t *testing.T, tests []compilerTestCase) {
 	t.Helper()
 
