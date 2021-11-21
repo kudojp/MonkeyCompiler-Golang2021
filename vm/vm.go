@@ -219,6 +219,15 @@ func (vm *VM) Run() error {
 			if err != nil {
 				return err
 			}
+		case code.OpClosure:
+			constIndex := code.ReadUint16(ins[ip+1:])
+			code.ReadUint8(ins[ip+3:]) // TODO: Handle the second operand which stands for the number of free variables
+			vm.currentFrame().ip += 3
+
+			err := vm.pushClosure(int(constIndex))
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil
@@ -486,6 +495,17 @@ func (vm *VM) callBuiltin(builtin *object.Builtin, numArgs int) error {
 		vm.push(Null)
 	}
 	return nil
+}
+
+func (vm *VM) pushClosure(constIndex int) error {
+	constant := vm.constants[constIndex]
+	function, ok := constant.(*object.CompiledFunction)
+	if !ok {
+		return fmt.Errorf("not a function: %+v", constant)
+	}
+
+	closure := &object.Closure{Fn: function}
+	return vm.push(closure)
 }
 
 func (vm *VM) currentFrame() *Frame {
