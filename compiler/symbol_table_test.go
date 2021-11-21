@@ -193,8 +193,8 @@ func TestResolveFree(t *testing.T) {
 				Symbol{Name: "f", Scope: LocalScope, Index: 1},
 			},
 			[]Symbol{
-				Symbol{Name: "c", Scope: FreeScope, Index: 0},
-				Symbol{Name: "d", Scope: FreeScope, Index: 1},
+				Symbol{Name: "c", Scope: LocalScope, Index: 0},
+				Symbol{Name: "d", Scope: LocalScope, Index: 1},
 			},
 		},
 	}
