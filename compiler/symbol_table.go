@@ -55,11 +55,17 @@ func (s *SymbolTable) DefineFree(original Symbol) Symbol {
 }
 
 func (s *SymbolTable) Resolve(name string) (Symbol, bool) {
-	obj, ok := s.store[name]
-	if s.Outer == nil || ok {
-		return obj, ok
+	obj, okInLocal := s.store[name]
+	if okInLocal || s.Outer == nil {
+		return obj, okInLocal
 	}
-	return s.Outer.Resolve(name)
+
+	obj, okInOuter := s.Outer.Resolve(name)
+	if okInOuter && obj.Scope != GlobalScope && obj.Scope != BuiltinScope {
+		// Note that a free scoped symbol is registered in FreeSymbols slice in every step in the recursion.
+		obj = s.DefineFree(obj)
+	}
+	return obj, okInOuter
 }
 
 func NewSymbolTable() *SymbolTable {
