@@ -19,6 +19,7 @@ type SymbolTable struct {
 	Outer          *SymbolTable
 	store          map[string]Symbol
 	numDefinitions int
+	FreeSymbols    []Symbol // Note that Scopes of all the symbols are LocalScope.
 }
 
 func (s *SymbolTable) Define(name string) Symbol {
