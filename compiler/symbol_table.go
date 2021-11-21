@@ -41,6 +41,19 @@ func (s *SymbolTable) DefineBuiltin(index int, name string) Symbol {
 	return symbol
 }
 
+/*
+Append a given Scope to the current symbol table's `FreeSymbols` slice.
+Also, define a corresponding LocalScope and register it in the current globals store.
+This newly added scope would be returned.
+*/
+func (s *SymbolTable) DefineFree(original Symbol) Symbol {
+	s.FreeSymbols = append(s.FreeSymbols, original)
+
+	symbol := Symbol{Name: original.Name, Index: len(s.FreeSymbols) - 1, Scope: FreeScope}
+	s.store[original.Name] = symbol
+	return symbol
+}
+
 func (s *SymbolTable) Resolve(name string) (Symbol, bool) {
 	obj, ok := s.store[name]
 	if s.Outer == nil || ok {
