@@ -385,6 +385,36 @@ func TestBuiltinFunctions(t *testing.T) {
 	runVmTests(t, tests)
 }
 
+func TestClosures(t *testing.T) {
+	tests := []vmTestCase{
+		{
+			input: `
+			let newClosure = fn(a){ fn(){a;}; }
+			let closure = newClosure(99)
+			closure()`,
+			expected: 99,
+		},
+		{
+			input: `
+			let newAddr = fn(a, b){ fn(c){ return a+b+c }; }
+			let adder = newAddr(1, 2)
+			adder(8)`,
+			expected: 11,
+		},
+		{
+			input: `
+			let newAdder = fn(a, b){
+				let c = a + b;
+				fn(d) { c + d };
+			}
+			let adder = newAdder(1, 2)
+			adder(8)`,
+			expected: 11,
+		},
+	}
+	runVmTests(t, tests)
+}
+
 /*
 Tests the top element in the stack.
 */
