@@ -55,6 +55,12 @@ func (s *SymbolTable) DefineFree(original Symbol) Symbol {
 	return symbol
 }
 
+func (s *SymbolTable) DefineFunctionName(name string) Symbol {
+	symbol := Symbol{Name: name, Index: 0, Scope: FunctionScope} // Index does not matter.
+	s.store[name] = symbol
+	return symbol
+}
+
 func (s *SymbolTable) Resolve(name string) (Symbol, bool) {
 	obj, okInLocal := s.store[name]
 	if okInLocal || s.Outer == nil {
