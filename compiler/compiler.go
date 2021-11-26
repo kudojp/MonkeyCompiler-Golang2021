@@ -257,6 +257,12 @@ func (c *Compiler) Compile(node ast.Node) error {
 		c.emit(code.OpIndex)
 	case *ast.FunctionLiteral:
 		c.enterScope()
+
+		// Register a name of the called function in the FunctionScope of the symbolTable.
+		if node.Name != "" {
+			c.symbolTable.DefineFunctionName(node.Name)
+		}
+
 		for _, p := range node.Parameters {
 			// Arguments are already put on the bottom of the stack by the caller before calling this function.
 			// So we just have to reserve the indexes here.
@@ -405,6 +411,8 @@ func (c *Compiler) loadSymbol(symbol Symbol) {
 		c.emit(code.OpGetBuiltin, symbol.Index)
 	case FreeScope:
 		c.emit(code.OpGetFree, symbol.Index)
+	case FunctionScope:
+		c.emit(code.OpCurrentClosure)
 	}
 }
 
