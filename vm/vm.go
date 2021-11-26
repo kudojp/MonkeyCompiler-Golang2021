@@ -366,7 +366,6 @@ func (vm *VM) executeIntegerComparison(
 	default:
 		return fmt.Errorf("unknown operator: %d", op)
 	}
-	return nil
 }
 
 func nativeBoolToBooleanObject(input bool) *object.Boolean {
