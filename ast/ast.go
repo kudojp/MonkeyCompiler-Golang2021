@@ -218,6 +218,7 @@ type FunctionLiteral struct {
 	Token      token.Token //= 'fn'
 	Parameters []*Identifier
 	Body       *BlockStatement
+	Name       string
 }
 
 func (fl *FunctionLiteral) expressionNode()      {}
