@@ -838,10 +838,10 @@ func TestDefineResolveBuiltins(t *testing.T) {
 	secondLocal := NewEnclosedSymbolTable(firstLocal)
 
 	expected := []Symbol{
-		Symbol{Name: "a", Scope: BuiltinScope, Index: 0},
-		Symbol{Name: "c", Scope: BuiltinScope, Index: 1},
-		Symbol{Name: "e", Scope: BuiltinScope, Index: 2},
-		Symbol{Name: "f", Scope: BuiltinScope, Index: 3},
+		{Name: "a", Scope: BuiltinScope, Index: 0},
+		{Name: "c", Scope: BuiltinScope, Index: 1},
+		{Name: "e", Scope: BuiltinScope, Index: 2},
+		{Name: "f", Scope: BuiltinScope, Index: 3},
 	}
 
 	for i, v := range expected {

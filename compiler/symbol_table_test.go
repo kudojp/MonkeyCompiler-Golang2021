@@ -82,10 +82,10 @@ func TestResolveLocal(t *testing.T) {
 	local.Define("d")
 
 	expected := []Symbol{
-		Symbol{Name: "a", Scope: GlobalScope, Index: 0},
-		Symbol{Name: "b", Scope: GlobalScope, Index: 1},
-		Symbol{Name: "c", Scope: LocalScope, Index: 0},
-		Symbol{Name: "d", Scope: LocalScope, Index: 1},
+		{Name: "a", Scope: GlobalScope, Index: 0},
+		{Name: "b", Scope: GlobalScope, Index: 1},
+		{Name: "c", Scope: LocalScope, Index: 0},
+		{Name: "d", Scope: LocalScope, Index: 1},
 	}
 
 	for _, sym := range expected {
@@ -175,26 +175,26 @@ func TestResolveFree(t *testing.T) {
 		{
 			firstLocal,
 			[]Symbol{
-				Symbol{Name: "a", Scope: GlobalScope, Index: 0},
-				Symbol{Name: "b", Scope: GlobalScope, Index: 1},
-				Symbol{Name: "c", Scope: LocalScope, Index: 0},
-				Symbol{Name: "d", Scope: LocalScope, Index: 1},
+				{Name: "a", Scope: GlobalScope, Index: 0},
+				{Name: "b", Scope: GlobalScope, Index: 1},
+				{Name: "c", Scope: LocalScope, Index: 0},
+				{Name: "d", Scope: LocalScope, Index: 1},
 			},
 			[]Symbol{},
 		},
 		{
 			secondLocal,
 			[]Symbol{
-				Symbol{Name: "a", Scope: GlobalScope, Index: 0},
-				Symbol{Name: "b", Scope: GlobalScope, Index: 1},
-				Symbol{Name: "c", Scope: FreeScope, Index: 0},
-				Symbol{Name: "d", Scope: FreeScope, Index: 1},
-				Symbol{Name: "e", Scope: LocalScope, Index: 0},
-				Symbol{Name: "f", Scope: LocalScope, Index: 1},
+				{Name: "a", Scope: GlobalScope, Index: 0},
+				{Name: "b", Scope: GlobalScope, Index: 1},
+				{Name: "c", Scope: FreeScope, Index: 0},
+				{Name: "d", Scope: FreeScope, Index: 1},
+				{Name: "e", Scope: LocalScope, Index: 0},
+				{Name: "f", Scope: LocalScope, Index: 1},
 			},
 			[]Symbol{
-				Symbol{Name: "c", Scope: LocalScope, Index: 0},
-				Symbol{Name: "d", Scope: LocalScope, Index: 1},
+				{Name: "c", Scope: LocalScope, Index: 0},
+				{Name: "d", Scope: LocalScope, Index: 1},
 			},
 		},
 	}
@@ -238,10 +238,10 @@ func TestResolveUnresolvableFree(t *testing.T) {
 	secondLocal.Define("f")
 
 	expected := []Symbol{
-		Symbol{Name: "a", Scope: GlobalScope, Index: 0},
-		Symbol{Name: "c", Scope: FreeScope, Index: 0},
-		Symbol{Name: "e", Scope: LocalScope, Index: 0},
-		Symbol{Name: "f", Scope: LocalScope, Index: 1},
+		{Name: "a", Scope: GlobalScope, Index: 0},
+		{Name: "c", Scope: FreeScope, Index: 0},
+		{Name: "e", Scope: LocalScope, Index: 0},
+		{Name: "f", Scope: LocalScope, Index: 1},
 	}
 
 	// resolvable bindings
