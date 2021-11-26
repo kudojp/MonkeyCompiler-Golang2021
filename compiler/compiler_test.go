@@ -985,6 +985,71 @@ func TestClosures(t *testing.T) {
 				code.Make(code.OpPop),
 			},
 		},
+		{
+			input: `
+			let countDown = fn(x) { countDown(x - 1); };
+			countDown(1)`,
+			expectedConstants: []interface{}{
+				1,
+				[]code.Instructions{
+					code.Make(code.OpCurrentClosure), // Op
+					code.Make(code.OpGetLocal, 0),
+					code.Make(code.OpConstant, 0),
+					code.Make(code.OpSub),
+					code.Make(code.OpCall, 1),
+					code.Make(code.OpReturnValue),
+				},
+				1,
+			},
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpClosure, 1, 0), // 0 free variables
+				code.Make(code.OpSetGlobal, 0),  // countDown =
+				code.Make(code.OpGetGlobal, 0),  // countDown
+				code.Make(code.OpConstant, 2),   // 1
+				code.Make(code.OpCall, 1),       // call #countDown()
+				code.Make(code.OpPop),
+			},
+		},
+		{
+			input: `
+			let wrapper = fn() {
+				let countDown = fn(x) { countDown(x-1) }
+				countDown(1);
+			}
+			wrapper();`,
+			expectedConstants: []interface{}{
+				1,
+				// fn(x) { countDown(x-1) }
+				[]code.Instructions{
+					code.Make(code.OpCurrentClosure), // #countDown
+					code.Make(code.OpGetLocal, 0),    // x
+					code.Make(code.OpConstant, 0),    // 1
+					code.Make(code.OpSub),
+					code.Make(code.OpCall, 1),
+					code.Make(code.OpReturnValue),
+				},
+				1,
+				// fn() {
+				// 	let countDown = fn(x) { countDown(x-1) }
+				// 	countDown(1);
+				// }
+				[]code.Instructions{
+					code.Make(code.OpClosure, 1, 0), // fn(x) { countDown(x-1) }
+					code.Make(code.OpSetLocal, 0),   // countDown =
+					code.Make(code.OpGetLocal, 0),
+					code.Make(code.OpConstant, 2),
+					code.Make(code.OpCall, 1),
+					code.Make(code.OpReturnValue),
+				},
+			},
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpClosure, 3, 0),
+				code.Make(code.OpSetGlobal, 0), // wrapper =
+				code.Make(code.OpGetGlobal, 1),
+				code.Make(code.OpCall, 0),
+				code.Make(code.OpPop),
+			},
+		},
 	}
 	runCompilerTest(t, tests)
 }
