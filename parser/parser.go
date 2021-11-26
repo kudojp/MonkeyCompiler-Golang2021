@@ -441,6 +441,10 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
+
+	if fl, ok := stmt.Value.(*ast.FunctionLiteral); ok {
+		fl.Name = stmt.Name.Value
+	}
 	return stmt
 }
 
