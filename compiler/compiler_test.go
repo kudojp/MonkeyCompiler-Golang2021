@@ -1045,7 +1045,7 @@ func TestClosures(t *testing.T) {
 			expectedInstructions: []code.Instructions{
 				code.Make(code.OpClosure, 3, 0),
 				code.Make(code.OpSetGlobal, 0), // wrapper =
-				code.Make(code.OpGetGlobal, 1),
+				code.Make(code.OpGetGlobal, 0),
 				code.Make(code.OpCall, 0),
 				code.Make(code.OpPop),
 			},
