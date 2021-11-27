@@ -36,3 +36,39 @@ VM:
 
 - creates objects from bytecode
 - uses the constant pool built in the compiler
+
+
+## How to test
+
+```sh
+go test ./
+```
+
+## Performance of interpreter vs compiler
+
+Run the snippet below with our interpreter/ our compiler to compare their performances.
+
+```js
+let fibonacci = fn(x) {
+  if (x == 0) {
+    0
+  } else {
+    if (x == 1) {
+      return 1;
+    } else {
+      fibonacci(x-1) + fibonacci(x-2)
+    }
+  }
+}
+fibonacci(35)
+```
+
+The result reveals that our compiler runs **3 times faster** than our interpreter.
+
+```sh
+$ go run benchmark/main.go -engine=vm
+engine=vm, result=9227465, duration=11.787990726s
+
+$ go run benchmark/main.go -engine=eval
+engine=eval, result=9227465, duration=37.105657782s
+```
