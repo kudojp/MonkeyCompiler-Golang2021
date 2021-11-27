@@ -461,6 +461,34 @@ func TestHashIndexExpression(t *testing.T) {
 	}
 }
 
+func TestReturnStatementsInFunctions(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected interface{}
+	}{
+		{
+			input: `
+			let f = fn(x) {
+				return 1;
+			}
+			f(1) + f(1)`,
+			expected: 2,
+		},
+	}
+
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		if errObj, ok := evaluated.(*object.Error); ok {
+			t.Errorf("Error when evaluating. Error message is: %s", errObj.Message)
+		}
+		integer, ok := tt.expected.(int)
+		if !ok {
+			t.Errorf("returned value is %T, want=integer", integer)
+		}
+		testIntegerObject(t, evaluated, int64(integer))
+	}
+}
+
 func testEval(input string) object.Object {
 	l := lexer.New(input)
 	p := parser.New(l)
