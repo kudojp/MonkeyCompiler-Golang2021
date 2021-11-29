@@ -20,7 +20,7 @@ PR#1 ~ PR#15 are in the scope of this book, and the version [2a928ad](https://gi
 
 Note that package `monkey/evaluator` is modified later in part2.
 
-## Part2. Writing A Compiler In Go (WIP)
+## Part2. Writing A Compiler In Go
 
 I created a Monkey compiler + VM with this book.
 
