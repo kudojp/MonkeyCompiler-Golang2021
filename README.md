@@ -1,5 +1,18 @@
 This readme would be tidied up after I finish reading both of the books. Sorry for the mess for now!
 
+
+# Blog posts
+
+I wrote these blog posts after finishing the implementation for the recap.
+
+- Part 1. [Design of the Monkey compiler](https://www.wantedly.com/users/67312544/post_articles/363007)
+- Part 2. [How a pratt parser in Moneky compiler works](https://www.wantedly.com/users/67312544/post_articles/364335)
+- Part 3. [How to compile global bindings](https://www.wantedly.com/users/67312544/post_articles/365686)
+
+
+
+
+
 # Monkey Compiler In Go
 
 A compiler written in Go. The language built is called [Monkey](https://monkeylang.org/).
