@@ -1,9 +1,7 @@
 This readme would be tidied up after I finish reading both of the books. Sorry for the mess for now!
 
 
-# Blog posts
-
-I wrote these blog posts after finishing the implementation for the recap.
+Currently, I am writiing these blog posts as a recap.
 
 - Part 1. [Design of the Monkey compiler](https://www.wantedly.com/users/67312544/post_articles/363007)
 - Part 2. [How a pratt parser in Moneky compiler works](https://www.wantedly.com/users/67312544/post_articles/364335)
