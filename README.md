@@ -1,14 +1,12 @@
 This readme would be tidied up after I finish reading both of the books. Sorry for the mess for now!
 
-
-Currently, I am writiing these blog posts as a recap.
+I have written these blog posts as a recap.
 
 - Part 1. [Design of the Monkey compiler](https://www.wantedly.com/users/67312544/post_articles/363007)
 - Part 2. [How a pratt parser in Moneky compiler works](https://www.wantedly.com/users/67312544/post_articles/364335)
 - Part 3. [How to compile global bindings](https://www.wantedly.com/users/67312544/post_articles/365686)
-
-
-
+- Part 4. [How to compile functions](https://www.wantedly.com/users/67312544/post_articles/367694)
+- Part 5, [What Monkey does not have, but Java has](https://www.wantedly.com/users/67312544/post_articles/366601)
 
 
 # Monkey Compiler In Go
