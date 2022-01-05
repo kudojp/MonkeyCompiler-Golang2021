@@ -1,8 +1,12 @@
 <details>
 <summary>Please also refer to my blog posts related to this project.</summary>
 
+<br/>
+
+  **Beautiful algorithms used in a compiler and a stack based virtual machine**
+
 - Part 1. [Design of the Monkey compiler](https://www.wantedly.com/users/67312544/post_articles/363007)
-- Part 2. [How a pratt parser in Moneky compiler works](https://www.wantedly.com/users/67312544/post_articles/364335)
+- Part 2. [How a pratt parser in Monkey compiler works](https://www.wantedly.com/users/67312544/post_articles/364335)
 - Part 3. [How to compile global bindings](https://www.wantedly.com/users/67312544/post_articles/365686)
 - Part 4. [How to compile functions](https://www.wantedly.com/users/67312544/post_articles/367694)
 - Part 5, [What Monkey does not have, but Java has](https://www.wantedly.com/users/67312544/post_articles/366601)
@@ -13,34 +17,31 @@
 
 ## About this project
 
-This is a Monkey language 
+This is a compiler and a virtual machine of the [Monkey programming language](https://monkeylang.org/).
+The design overview of this project is described [here](https://www.wantedly.com/users/67312544/post_articles/363007).
 
-This is a [Monkey](https://monkeylang.org/) is a programming language which has minimum features
-compiler written in Go. The language is called [Monkey](https://monkeylang.org/). I referenced these two books.
+As a guide of this project, I referenced these two books written by [Thorsten Ball](https://thorstenball.com/).
 
-- [Writing An Interpreter In Go (Thorsten Ball)](https://interpreterbook.com/)
-- [Writing A Compiler In Go (Thorsten Ball)](https://compilerbook.com/)
+- [Writing An Interpreter In Go](https://interpreterbook.com/)
+- [Writing A Compiler In Go](https://compilerbook.com/)
 
-<img src="https://user-images.githubusercontent.com/44487754/138540981-d84fe021-86fd-41d3-8587-7070b101d769.png" height="300"><img src="https://user-images.githubusercontent.com/44487754/138540951-41167952-9f0d-49ff-8889-57daa7fba2d6.png" height="300"><img src="https://user-images.githubusercontent.com/44487754/138540965-52b709f7-d4d1-4c96-81f0-ad3de144d041.png" height="300">
-
-For "Writing An Interpreter In Go", I read the Japanese translated version, which is "[Go 言語でつくるインタプリタ](https://www.oreilly.co.jp/books/9784873118222/)".
+<img src="https://user-images.githubusercontent.com/44487754/138540951-41167952-9f0d-49ff-8889-57daa7fba2d6.png" height="240"><img src="https://user-images.githubusercontent.com/44487754/138540965-52b709f7-d4d1-4c96-81f0-ad3de144d041.png" height="240">
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
 
 ## Getting Started
 
 
 ### How to build and run
 
-```sh
+```
 $ go build .
 $ go run .
 ```
 ### How to test
 
-```sh
-go test ./...
+```
+$ go test ./...
 ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -48,40 +49,24 @@ go test ./...
 
 ## Project History
 
+In this project, Monkey was first implemented as an interpreter. Then, it has been updated to a compiler. Both of them are REPL style.
 
-### Monkey interpreter
+### [v1.0](https://github.com/kudojp/MonkeyCompiler-Golang2021/releases/tag/v1.0). Monkey Interpreter
 
-Writing An Interpreter In Go
+The first version of Monkey was a tree walking interpreter.
 
-I created a Monkey interpreter (REPL) with this book.
-PR#1 ~ PR#15 are in the scope of this book, and the version [2a928ad](https://github.com/kudojp/MonkeyInterpreter-Golang2021/commit/2a928adc2255b07605bea252dfc929a79115f171) is the completed one.
+PR#1 ~ PR#15 are the processes of implementation, where the lexer, the parser, and the evaluator are implemented. The algorithm used in the parser in documented [here](https://www.wantedly.com/users/67312544/post_articles/364335).
 
-Note that package `monkey/evaluator` is modified later in part2.
+### [v2.0](https://github.com/kudojp/MonkeyCompiler-Golang2021/releases/tag/v2.0). Monkey Compiler
 
-### Monkey compiler
+The second and the latest version of Monkey is a bytecode compiler and virtual machine. The previous version has been refactored and converted into this version in PR#16 and later.
 
-Part2. Writing A Compiler In Go
+The algorithms used for compiling and executing local variables are documented [here](https://www.wantedly.com/users/67312544/post_articles/365686), and those for functions are [here](https://www.wantedly.com/users/67312544/post_articles/367694).
 
-I created a Monkey compiler + VM with this book.
+### (Appendix) Benchmarking of the interpreter vs. the compiler
 
-- Byte code = opcode + operands
-  - Constants are held as an object in a constant pool (slice) and the byte code has an index of that as an operand (instead of embedding the values directly in the bytecode).
-
-Compiler:
-
-- creates bytecode from ast
-- creates a constant pool as an array of objects
-
-VM:
-
-- creates objects from bytecode
-- uses the constant pool built in the compiler
-
-### (Appendix) Benchmark of the interpreter vs. the compiler
-
-Performance of interpreter vs compiler
-
-Run the snippet below with our interpreter/ our compiler to compare their performances.
+Here is the benchmark testing of the interpreter version and the compiler version.
+The snippet below is executed by each of them.
 
 ```js
 let fibonacci = fn(x) {
@@ -95,17 +80,20 @@ let fibonacci = fn(x) {
     }
   }
 }
+
 fibonacci(35)
 ```
 
-The result reveals that our compiler runs **3 times faster** than our interpreter.
+The result reveals that the compiler version is **more than 3 times** as performant as the interpreter version.
 
 ```sh
-$ go run benchmark/main.go -engine=vm
-engine=vm, result=9227465, duration=11.787990726s
-
+# the interpreter version
 $ go run benchmark/main.go -engine=eval
 engine=eval, result=9227465, duration=37.105657782s
+
+# the compiler version
+$ go run benchmark/main.go -engine=vm
+engine=vm, result=9227465, duration=11.787990726s
 ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -113,7 +101,7 @@ engine=eval, result=9227465, duration=37.105657782s
 
 ## Contributing
 
-If you have a suggestion that would make this project better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement". Don't forget to give the project a star! Thanks again!
+If you have a suggestion that would make this project better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement". Some possible improvements are listed [here](https://www.wantedly.com/users/67312544/post_articles/366601). Don't forget to give the project a star! Thanks again.
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
