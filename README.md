@@ -9,7 +9,7 @@
 - Part 2. [How a pratt parser in Monkey compiler works](https://www.wantedly.com/users/67312544/post_articles/364335)
 - Part 3. [How to compile global bindings](https://www.wantedly.com/users/67312544/post_articles/365686)
 - Part 4. [How to compile functions](https://www.wantedly.com/users/67312544/post_articles/367694)
-- Part 5, [What Monkey does not have, but Java has](https://www.wantedly.com/users/67312544/post_articles/366601)
+- Part 5. [What Monkey does not have, but Java has](https://www.wantedly.com/users/67312544/post_articles/366601)
 
 </details>
 
